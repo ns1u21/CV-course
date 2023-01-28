@@ -1,0 +1,94 @@
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+plt.rcParams['figure.figsize'] = [10, 5]
+path = r'/Users/nataliyashepel/Documents/COMPUTER VISION COURSE/photo/lesson2_5.png'
+img = cv2.imread(path)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.imshow(img)
+
+row, col = 100, 100
+white = img[row, col, :]
+coeffs = 255/white
+
+balanced = np.zeros_like(img, dtype=np.float32)
+for channel in range(3):
+    balanced[..., channel] = img[..., channel] * coeffs[channel]
+    
+balanced = balanced/255
+balanced[balanced > 1] = 1
+
+plt.subplot(121), plt.imshow(img)
+plt.subplot(122), plt.imshow(balanced)
+
+
+# Gray World 
+
+
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+plt.rcParams['figure.figsize'] = [10, 5]
+
+# Load your image
+path = r'/Users/nataliyashepel/Documents/COMPUTER VISION COURSE/photo/lesson2_5.png'
+img = cv2.imread(path)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.imshow(img)
+
+
+# Compute the mean values for all three colour channels (red, green, blue)
+mean_r = np.mean(img[..., 0])
+mean_g = np.mean(img[..., 1])
+mean_b = np.mean(img[..., 2])
+print (mean_r, mean_g, mean_b)
+
+# Compute the coefficients kr, kg, kb
+# Note: there are 3 coefficients to compute but we only have 2 equations.
+# Therefore, you have to make an assumption, fix the value of one of the
+# coefficients and compute the remining two
+# Hint: You can fix the coefficient of the brightest colour channel to 1.
+kr = mean_b/mean_r
+kg = mean_b/mean_g
+kb = 1
+print (kr, kg, kb)
+
+# Apply color balancing and generate the balanced image
+balanced[..., 0] = img[..., 0] * kr
+balanced[..., 1] = img[..., 1] * kg
+balanced[..., 2] = img[..., 2] * kb
+balanced = balanced/255
+balanced[balanced > 1] = 1
+
+# Show the original and the balanced image side by side
+plt.subplot(121), plt.imshow(img)
+plt.subplot(122), plt.imshow(balanced)
+
+
+# Scale-by-max
+
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+plt.rcParams['figure.figsize'] = [10, 5]
+
+# Load your image
+path = r'/Users/nataliyashepel/Documents/COMPUTER VISION COURSE/photo/lesson2_5.png'
+img = cv2.imread(path)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.imshow(img)
+
+max_r = np.max(img[..., 0]) 
+max_g = np.max(img[..., 1]) 
+max_b = np.max(img[..., 2]) 
+
+balanced[..., 0] = 255*(img[..., 0] / max_r)
+balanced[..., 1] = 255*(img[..., 1] / max_b)
+balanced[..., 2] = 255*(img[..., 2] / max_g)
+
+
+balanced[balanced > 1] = 1
+
+
+plt.subplot(121), plt.imshow(img)
+plt.subplot(122), plt.imshow(balanced)
